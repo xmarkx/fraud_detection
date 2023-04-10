@@ -9,7 +9,7 @@ import streamlit as st
 from PIL import Image
 
 
-# Confit
+# Config
 st.set_page_config(page_title='Credit Card Fraud Detection', page_icon='💳', initial_sidebar_state="expanded", layout='wide')
 
 # Title

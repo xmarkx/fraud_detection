@@ -6,7 +6,7 @@ Created on Tue Apr  4 13:39:04 2023
 """
 import streamlit as st
 import pandas as pd
-import os
+
 
 
 
@@ -15,45 +15,9 @@ st.markdown(" Anonymized credit card transactions labeled as fraudulent or genui
 st.sidebar.markdown("# Page 2 ❄️")
 
 
-#########################
-# FETCH SOME DATA
-#########################
+raw_data = st.session_state["raw_data"]
 
-st.write("Loading the data...")
-
-current_file_path = os.path.abspath(__file__)
-directory_path = os.path.dirname(current_file_path)
-
-data_path = os.path.join(directory_path, 'data\\creditcard.csv')
-#data_path = 'C:/Users/katar/OneDrive/Dokumenty/Edukacja/Data Science/6_DS_Project/Project/03_Coding/Temp/data/Fraud.csv'
-
-#DATE_COLUMN = 'date/time'
-#DATA_URL = ('https://s3-us-west-2.amazonaws.com/''streamlit-demo-data/uber-raw-data-sep14.csv.gz')
-
-@st.cache_data
-def load_data(nrows):
-    data = pd.read_csv(data_path, nrows=nrows)
-    lowercase = lambda x: str(x).lower()
-    data.rename(lowercase, axis='columns', inplace=True)
-    # data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
-    return data
-
-# Create a text element and let the reader know the data is loading.
-data_load_state = st.text('Loading data...')
-# Load 10,000 rows of data into the dataframe.
-raw_data = load_data(100)
-
-# Notify the reader that the data was successfully loaded.
-#data_load_state.text('Loading data...done!')
-data_load_state.text("Done! (using st.cache_data)")
-
-
-
-
-
-
-
-# Define the sidebar options
+#Define the sidebar options
 options = {
     "Raw Data": True,
     "Duplicates": False,
