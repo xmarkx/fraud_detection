@@ -94,7 +94,9 @@ directory_path = os.path.dirname(current_file_path)
 
 data_path = os.path.join(directory_path, 'data\\creditcard.csv')
 
-
+# st.write(current_file_path)
+# st.write(directory_path)
+st.write(data_path)
 
 
 # Create a text element and let the reader know the data is loading.
