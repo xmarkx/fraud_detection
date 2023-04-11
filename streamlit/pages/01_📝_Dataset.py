@@ -42,6 +42,29 @@ def load_data():
     # data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
     return data
 
+
+@st.cache_data
+def plot_class_distribution(data):
+    # Get the class distribution
+    class_counts = data['class'].value_counts()
+    minority_class = class_counts.index[-1]
+    majority_class = class_counts.index[0]
+
+    proportion = data['class'].value_counts(normalize=True)
+    amount = data['class'].value_counts(normalize=False)
+
+    # Display the class distribution
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bar = sns.countplot(x='class', data=data, ax=ax)
+    for i in range(len(proportion)):
+        bar.text(i, amount[0]/2, str(round(proportion[i]*100,2)) + "%", fontdict=dict(fontsize=12), horizontalalignment='center')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
+    ax.set_title("Class Distribution", fontsize=16)
+    st.pyplot(fig)
+
+
+
+
 ####################################################################################
 # ---------------------------------------------------------------------------------
 
@@ -49,8 +72,8 @@ def load_data():
 # -----------------------------
 # Titel and subtitle of the page
 # ------------------------------
-st.markdown("# Credit Card Fraud Detection - Dataset ❄️")
-st.markdown(" Anonymized credit card transactions labeled as fraudulent or genuine")
+st.markdown("# Credit Card Fraud Detection - Dataset")
+st.markdown("The dataset has been collected and analysed during a research collaboration of Worldline and the Machine Learning Group of ULB (Université Libre de Bruxelles) on big data mining and fraud detection.")
 st.sidebar.markdown("# Page 2 ❄️")
 
 
@@ -150,18 +173,15 @@ tab1, tab2, tab3, tab4, = st.tabs(["Raw data", "Duplicates", "Class Imbalance", 
 with tab1:
    st.header("Raw data")
 
-   st.write(
+   st.markdown(
         """
         The dataset contains transaction data from a two-day period in September 2013, where a total of 492 fraud 
-        cases out of 284,807 transactions occurred. The dataset includes a mix of numerical and categorical
-        features, such as transaction amount, time, and various V1-V28 features, which are the result of a PCA
-        transformation to protect user privacy.
-        """
-        )
+        cases out of 284,807 transactions occurred. """)
+       
      
-    # Define the checkbox to show/hide the dataset
+     # Define the checkbox to show/hide the dataset
    show_dataset = st.checkbox("Show Dataset")
-    
+     
    if show_dataset:
         # Define columns to display
         cols_default = ['class', 'time', 'amount', 'v1', 'v2', 'v3', 'v4', 'v26', 'v27', 'v28']
@@ -176,15 +196,15 @@ with tab1:
         # Show dataset if checkbox is selected
         st.write(data_subset.head(num_rows))
         
-        st.write('* The dataset has 31 features  \n',
-             '* The dataset has 284807 observations in total  \n',
-             '* The dataset has no missing values  \n',
-             '* The target feature is Class  \n'
-             '* Except for Time, Amount and Class features, all other features are unnamed, which is a result of PCA dimension reduction and also serves as a way to anonymize the data  \n',
-             '* All the features have numeric data, except Time and Class  \n',
-             '* Class is Nominal Categoric data  \n',
-             '* Time (copy the description from Kaggel could be Ordinal Categoric data  \n')
-
+   st.write('The dataset includes:  \n',
+        "* Features $V1, V2, … V28$ which are the principal components obtained with PCA. (Due to confidentiality issues more background details couldn't be provided.')  \n",
+        "* $Time$ contains the seconds elapsed between a transaction and the first transaction in the dataset.  \n",
+        "* $Amount$ is the transaction amount.  \n",
+        "* $Class$ is the response/target variable and it takes value $1$ in case of fraud and $0$ otherwise.  \n",
+        '* All the features have numeric data, however $Time$ and $Amount$ needs further analysis. \n',
+        '* $Class$ is nominal categoric data.')
+          
+  
 
 
 # ----------------
@@ -194,8 +214,10 @@ with tab1:
 with tab2:
    st.header("Duplicates")
    num_duplicates = raw_data_un.duplicated(keep='first').sum()
-   st.subheader("Duplicates")
-   st.write("The dataset contained  ", num_duplicates," transactions which are duplicates. The duplicates has been removed to ensure the integrity of the data as duplicated transactions can bias the model's performance metrics.")
+   #st.subheader("Duplicates")
+   st.write("The dataset contained  ", num_duplicates," transactions which are duplicates.")
+   st.write("A transaction is treated as a duplicate only if there is another transaction with exactly the same values in all columns.")
+   st.write("The duplicates has been removed to ensure the integrity of the data as duplicated transactions can bias the model's performance metrics.")
    # Define the checkbox to show/hide the duplicates
    show_duplicates = st.checkbox("Show duplicates")
     
@@ -206,14 +228,11 @@ with tab2:
         duplicates = raw_data_un[raw_data_un.duplicated(keep=False)]
 
         # Define the slider to choose how many rows to display
-        num_rows_dup = st.slider("Number of Rows to Display", min_value=1, max_value=len(duplicates), value=5)
+        num_rows_dup = st.slider("Number of Rows to Display", min_value=1, max_value=len(duplicates), value=10)
 
         # Show dataset if checkbox is selected
         st.write(duplicates.head(num_rows_dup))
-        
-        # The describtion as expandable 
-        collab_text("More about duplicates", 
-                    "A transaction is treated as duplicate olny if there is another transaction with exactly the same values in all columns.")
+      
 
 
 
@@ -223,54 +242,41 @@ with tab2:
 
 with tab3:
    st.header("Class Imbalance")
-   st.write("The dataset is highly imbalanced, with fraudulent transactions making up only a small fraction of the total transactions. This can be challenging for machine learning models to handle, as they tend to prioritize accuracy over detecting the minority class. To address this, we will be using evaluation metrics that are better suited for imbalanced datasets, such as precision, recall, and F1 score.")
-   data = st.session_state['raw_data']
-
-   # Get the class distribution
-   class_counts = data['class'].value_counts()
-   minority_class = class_counts.index[-1]
-   majority_class = class_counts.index[0]
-    
-   proportion = raw_data['class'].value_counts(normalize=True)
-   amount = raw_data['class'].value_counts(normalize=False)
-    
-
-    # Display the class distribution
-   st.write("Class distribution:")
-   fig, ax = plt.subplots()
-   bar = sns.countplot(x='class', data=data, ax=ax)
-   for i in range (len(proportion)):
-       bar.text(i, amount[0]/2, str(round(proportion[i]*100,2)), 
-                fontdict=dict(fontsize=12), horizontalalignment='center')
-   ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
-   st.pyplot(fig)
+   st.write("""
+            The dataset is highly imbalanced, with fraudulent transactions making up only a small fraction of the total 
+            transactions. This can be challenging for machine learning models to handle, as they tend to prioritize 
+            accuracy over detecting the minority class.""")
+   plot_class_distribution(raw_data)
 
    
    # Discuss the impact of class imbalance
-   st.write("The imbalance of this dataset may lead to models that are biased towards the majority class, and may perform poorly on the minority class. It's important to use techniques like oversampling or undersampling to address this issue.")
+   st.write("""A model that simply predicts all transactions as non-fraudulent would achieve an accuracy of 99.8%. 
+            This means that we will need to find other metrics which provide a better measure of how well the model
+            is detecting fraudulent transactions (precision, recall, F1 score, ROC AUC etc).
+            """)
 
    # Discuss potential solutions
-   st.write("Potential solutions to address class imbalance include oversampling the minority class, undersampling the majority class, or using techniques like SMOTE to generate synthetic samples of the minority class.")
-
-    
-    
-    
-   st.write("We will be using  (...) to measure the performance of our model. These metrics take into account the imbalance in the dataset and provide a better measure of how well the model is detecting fraudulent transactions.")
+   st.write("Another solution which is worth considering is to include oversampling of the minority class or undersampling the majority class.")
 
 
+#data = st.session_state['raw_data']
 # ----------------
 # Data splitting
 # ----------------
 
 with tab4:
    st.header("Data Splitting")
-   st.write("The dataset was split into a training set (60% of the data), a validation set (20% of the data), and a test set (20% of the data). This was done to ensure that the model is trained on a sufficient amount of data and can generalize well to unseen data.")
-
-   st.write("Training set dimensions: ", raw_train.shape)#, 'amd training lagels:', y_train.shape,)
-   st.write("Test set dimensions: ", raw_test.shape)#, 'and test labels:', y_test.shape)
-   st.write("Validation dataset dimensions: ", raw_val.shape)#, 'and validation labels:', y_val.shape)
-
-
-
+   st.write("The dataset was split into a training set (60% of the data), a validation set (20% of the data), and a test set (20% of the data).")
+   st.write("* Training set dimensions: ", raw_train.shape, "  \n",
+            "* Test set dimensions: ", raw_test.shape, "  \n",
+            "* Validation dataset dimensions: ", raw_val.shape)
+   
+   datasets = {"Dataset": ["Raw Data", "Train Data", "Validation set", "Test Data"],
+               "Total Rows": [len(raw_data), len(raw_train), len(raw_val), len(raw_test)],
+               "Class 0": [len(raw_data[raw_data['class'] == 0]), len(raw_train[raw_train['class'] == 0]), len(raw_val[raw_val['class'] ==0]), len(raw_test[raw_test['class'] == 0])],
+               "Class 1": [len(raw_data[raw_data['class'] == 1]), len(raw_train[raw_train['class'] == 1]), len(raw_val[raw_val['class'] ==1]),  len(raw_test[raw_test['class'] == 1])]
+           }
+   df_datasets = pd.DataFrame(datasets)
+   st.write(df_datasets)
 
 
