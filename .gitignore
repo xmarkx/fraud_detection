@@ -4,4 +4,5 @@
 creditcard.csv
 pages\data\creditcard.csv
 streamlit\pages\data\creditcard.csv
+models/voting_3best_fbeta_soft.joblib
 
