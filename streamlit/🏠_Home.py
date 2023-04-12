@@ -54,7 +54,7 @@ st.subheader('Challenge')
 st.write(
     """
     Detecting fraudulent transactions is critical for financial institutions to protect their customers and minimize
-    financial losses. However, it's important to strike a balance between accuracy and false positive rates. 
+    financial losses. However, it's important to strike a balance between falce negative and false positive rates. 
     While it's essential to catch as many fraudulent transactions as possible, flagging too many legitimate 
     transactions as fraudulent can lead to customer dissatisfaction and lost revenue. Therefore, building an accurate
     fraud detection model that minimizes false positives is a significant challenge for financial institutions.
@@ -66,9 +66,7 @@ st.write(
     """
 )
 
-#c1, c2, c3 = st.columns(3)
-#with c1:
+
 st.info('**Data Scientists: [@Kasia](https://www.linkedin.com/in/katarzyna-zbroinska-76301b21/), [@Mark](https://www.linkedin.com/in/mark-meszaros-ds/)**', icon="💡")
 st.info('**GitHub: [@xmarkx](https://github.com/xmarkx/fraud_detection)**', icon="💻")
-#with c2:
 st.info('**Data: [Kaggle]((https://www.kaggle.com/mlg-ulb/creditcardfraud))**', icon="🗃")
