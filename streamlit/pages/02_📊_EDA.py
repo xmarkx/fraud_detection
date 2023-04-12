@@ -96,6 +96,79 @@ def plot_corr_matrix():
     return f
 
 
+@st.cache_data
+class DataCleaner1(BaseEstimator, TransformerMixin):
+    '''takes X as an argument'''
+    
+    
+    def __init__(self, hour:bool =True, feature_to_drop:list =[], imputer:str = None, \
+                 amount_scaler:str = None, time_scaler:str = None, amount_log:bool = False):
+        self.hour = hour
+        self.feature_to_drop = feature_to_drop
+        self.imputer = imputer
+        self.amount_scaler = amount_scaler
+        self.time_scaler = time_scaler
+        self.time = ['Time']
+        self.amount = ['Amount']
+        self.amount_log = amount_log
+
+        
+        
+    def fit(self, data, y = None):
+        if self.imputer:
+            self.imputer.fit(data)
+        
+        if self.amount_scaler:
+            self.amount_scaler.fit(data.loc[:,self.amount])
+            
+        if self.time_scaler:
+            self.time_scaler.fit(data.loc[:,self.time])
+           
+        return self 
+    
+    
+    def transform(self, data, y = None):
+        # make a copy of the input data
+        data = data.copy()
+        
+               
+        #Imputing missing_values 
+        if data.isnull().values.any() or data.isna().values.any():
+            data = pd.DataFrame(self.imputer.transform(data), columns=data.columns)
+       
+        # log transform amount
+        if self.amount_log == True:
+            data['Amount'] = np.log1p(data['Amount'])
+                
+
+        if self.amount_scaler:
+            data_amount_scaled = self.amount_scaler.transform(data.loc[:,self.amount])
+            data.loc[:,self.amount] = data_amount_scaled
+            
+        if self.time_scaler:
+            data_time_scaled = self.time_scaler.transform(data.loc[:,self.time])
+            data.loc[:,self.time] = data_time_scaled
+
+
+        # Converting 'Time' to 'hours':
+        if self.hour:
+            if 'Time' in data.columns:
+                data['hour'] = ((((data['Time']) // (60 * 60)) % 24) + 1)
+                data['hour'] = data['hour'].astype(int)
+                data = data.drop('Time', axis=1)
+            
+                # one-hot-encoded dataset
+                data = pd.get_dummies(data, columns=['hour'], prefix='hour')
+            else:
+                print("No 'Time' variable in the dataset")
+
+        # Dropping not needed features based on the feature_to_drop list
+        if self.feature_to_drop:
+            data = data.drop(self.feature_to_drop, axis=1)
+        
+        
+        return data
+
 # this mean end of this part###################################################################################
 # ---------------------------------------------------------------------------------
 
@@ -147,7 +220,7 @@ raw_train = st.session_state["raw_train"]
 # --------------------
 
 
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Numeric Data", "Outliers", "Samplers", "Correlation matrix", "Amount", "Time"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Numeric Data", "Outliers", "Samplers", "Correlation matrix", "Amount", "Time", "Prepocessed data"])
 
 with tab1:
    st.header("Numeric Data")
@@ -211,7 +284,9 @@ with tab6:
    st.header("Time")
    st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
    
+with tab7:
+    st.header("Pre-processed data")
    
 #raw_data = st.session_state["raw_train"]
 #st.write(raw_train.head())
-#"st.session_state object: " , st.session_state
+# "st.session_state object: " , st.session_state

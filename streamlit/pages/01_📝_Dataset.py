@@ -96,7 +96,7 @@ data_path = os.path.join(directory_path, 'data\\creditcard.csv')
 
 # st.write(current_file_path)
 # st.write(directory_path)
-st.write(data_path)
+# st.write(data_path)
 
 
 # Create a text element and let the reader know the data is loading.
@@ -261,7 +261,7 @@ with tab3:
    st.write("Another solution which is worth considering is to include oversampling of the minority class or undersampling the majority class.")
 
 
-#data = st.session_state['raw_data']
+data = st.session_state['raw_data']
 # ----------------
 # Data splitting
 # ----------------
