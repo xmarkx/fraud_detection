@@ -96,6 +96,7 @@ def plot_corr_matrix():
     return f
 
 
+<<<<<<< HEAD
 @st.cache_data
 class DataCleaner1(BaseEstimator, TransformerMixin):
     '''takes X as an argument'''
@@ -169,6 +170,8 @@ class DataCleaner1(BaseEstimator, TransformerMixin):
         
         return data
 
+=======
+>>>>>>> 4c8c438c1d69eb994033f186ff194a065c6cc63a
 # this mean end of this part###################################################################################
 # ---------------------------------------------------------------------------------
 
@@ -220,7 +223,11 @@ raw_train = st.session_state["raw_train"]
 # --------------------
 
 
+<<<<<<< HEAD
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Numeric Data", "Outliers", "Samplers", "Correlation matrix", "Amount", "Time", "Prepocessed data"])
+=======
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Numeric Data", "Outliers", "Samplers", "Correlation matrix", "Amount", "Time"])
+>>>>>>> 4c8c438c1d69eb994033f186ff194a065c6cc63a
 
 with tab1:
    st.header("Numeric Data")
@@ -283,6 +290,7 @@ with tab5:
 with tab6:
    st.header("Time")
    st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
+<<<<<<< HEAD
    
 with tab7:
     st.header("Pre-processed data")
@@ -290,3 +298,10 @@ with tab7:
 #raw_data = st.session_state["raw_train"]
 #st.write(raw_train.head())
 # "st.session_state object: " , st.session_state
+=======
+   
+   
+#raw_data = st.session_state["raw_train"]
+#st.write(raw_train.head())
+#"st.session_state object: " , st.session_state
+>>>>>>> 4c8c438c1d69eb994033f186ff194a065c6cc63a
