@@ -63,8 +63,6 @@ def plot_class_distribution(data):
     st.pyplot(fig)
 
 
-
-
 ####################################################################################
 # ---------------------------------------------------------------------------------
 
@@ -74,7 +72,7 @@ def plot_class_distribution(data):
 # ------------------------------
 st.markdown("# Credit Card Fraud Detection - Dataset")
 st.markdown("The dataset has been collected and analysed during a research collaboration of Worldline and the Machine Learning Group of ULB (Université Libre de Bruxelles) on big data mining and fraud detection.")
-st.sidebar.markdown("# Page 2 ❄️")
+
 
 
 
@@ -86,7 +84,7 @@ st.sidebar.markdown("# Page 2 ❄️")
 # FETCH SOME DATA
 #-------------------
 
-st.write("Loading the data...")
+#st.write("Loading the data...")
 
 # getting the path to the file with data
 current_file_path = os.path.abspath(__file__)
@@ -96,7 +94,7 @@ data_path = os.path.join(directory_path, 'data\\creditcard.csv')
 
 # st.write(current_file_path)
 # st.write(directory_path)
-st.write(data_path)
+# st.write(data_path)
 
 
 # Create a text element and let the reader know the data is loading.
@@ -105,8 +103,8 @@ data_load_state = st.text('Loading data...')
 raw_data_un = load_data()
 
 # Notify the reader that the data was successfully loaded.
-#data_load_state.text('Loading data...done!')
-data_load_state.text("Done! (using st.cache_data)")
+data_load_state.text('Loading data...done!')
+#data_load_state.text("Done! (using st.cache_data)")
 
 
 #-------------------------------------------
@@ -150,13 +148,6 @@ if "raw_test" not in st.session_state:
 
 ######################
 # PRESENTATION
-
-
-# ----------------
-# Config
-# ----------------
-#st.set_page_config(page_title='Credit Card Fraud Detection', page_icon='💳', initial_sidebar_state="expanded", layout='wide')
-
 
 
 
@@ -220,10 +211,10 @@ with tab2:
    st.write("The dataset contained  ", num_duplicates," transactions which are duplicates.")
    st.write("A transaction is treated as a duplicate only if there is another transaction with exactly the same values in all columns.")
    st.write("The duplicates has been removed to ensure the integrity of the data as duplicated transactions can bias the model's performance metrics.")
-   # Define the checkbox to show/hide the duplicates
+   
+   # Define the checkbox
    show_duplicates = st.checkbox("Show duplicates")
-    
-    
+        
    if show_duplicates:
        
         # Selected the columns
@@ -248,20 +239,26 @@ with tab3:
             The dataset is highly imbalanced, with fraudulent transactions making up only a small fraction of the total 
             transactions. This can be challenging for machine learning models to handle, as they tend to prioritize 
             accuracy over detecting the minority class.""")
-   plot_class_distribution(raw_data)
-
    
-   # Discuss the impact of class imbalance
+   col1, col2, col3 = st.columns([1, 2, 1])
+   with col1:
+      pass
+   with col2:
+       plot_class_distribution(raw_data)
+   with col3:
+      pass
+   
+
    st.write("""A model that simply predicts all transactions as non-fraudulent would achieve an accuracy of 99.8%. 
             This means that we will need to find other metrics which provide a better measure of how well the model
             is detecting fraudulent transactions (precision, recall, F1 score, ROC AUC etc).
             """)
 
-   # Discuss potential solutions
+   
    st.write("Another solution which is worth considering is to include oversampling of the minority class or undersampling the majority class.")
 
 
-#data = st.session_state['raw_data']
+
 # ----------------
 # Data splitting
 # ----------------

@@ -4,4 +4,8 @@
 creditcard.csv
 pages\data\creditcard.csv
 streamlit\pages\data\creditcard.csv
+<<<<<<< HEAD
+models/voting_3best_fbeta_soft.joblib
+=======
+>>>>>>> 4c8c438c1d69eb994033f186ff194a065c6cc63a
 
