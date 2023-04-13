@@ -58,8 +58,8 @@ st.subheader('Challenge')
 st.write(
     """
     Our model needs to focus in a first line in identifying frauds however we shouldn't underestimate the precision.
-    No one likes the idea of losing money to fraudsters, but mistakenly flagging to many transaction as fraudalent can make some people unhappy too. 
-    That could really upset our customers whose transactions were bloced, not to mention the AML Department employees who will need to work some extra hours.
+    No one likes the idea of losing money to fraudsters, but mistakenly flagging to many transaction as fraudulent can make some people unhappy or even angry too. 
+    That could really upset our customers whose transactions were blocked, not to mention the AML Department employees who will need to work some extra hours.
     
     In this presentation, we'll show the steps we took to build our fraud detection model, using 
     the Credit Card Fraud Detection dataset. We will cover data preprocessing, exploratory data analysis, model 

@@ -210,7 +210,7 @@ with tab2:
    #st.subheader("Duplicates")
    st.write("The dataset contained  ", num_duplicates," transactions which are duplicates.")
    st.write("A transaction is treated as a duplicate only if there is another transaction with exactly the same values in all columns.")
-   st.write("The duplicates has been removed to ensure the integrity of the data as duplicated transactions can bias the model's performance metrics.")
+   st.write("The duplicates have been removed to ensure the integrity of the data as duplicated transactions can bias the model's performance metrics.")
    
    # Define the checkbox
    show_duplicates = st.checkbox("Show duplicates")
@@ -270,12 +270,13 @@ with tab4:
             "* Test set dimensions: ", raw_test.shape, "  \n",
             "* Validation dataset dimensions: ", raw_val.shape)
    
-   datasets = {"Dataset": ["Raw Data", "Train Data", "Validation set", "Test Data"],
-               "Total Rows": [len(raw_data), len(raw_train), len(raw_val), len(raw_test)],
-               "Class 0": [len(raw_data[raw_data['class'] == 0]), len(raw_train[raw_train['class'] == 0]), len(raw_val[raw_val['class'] ==0]), len(raw_test[raw_test['class'] == 0])],
-               "Class 1": [len(raw_data[raw_data['class'] == 1]), len(raw_train[raw_train['class'] == 1]), len(raw_val[raw_val['class'] ==1]),  len(raw_test[raw_test['class'] == 1])]
+   datasets = {
+           "Total Rows": [len(raw_data), len(raw_train), len(raw_val), len(raw_test)],
+           "Class 0": [len(raw_data[raw_data['class'] == 0]), len(raw_train[raw_train['class'] == 0]), len(raw_val[raw_val['class'] ==0]), len(raw_test[raw_test['class'] == 0])],
+           "Class 1": [len(raw_data[raw_data['class'] == 1]), len(raw_train[raw_train['class'] == 1]), len(raw_val[raw_val['class'] ==1]),  len(raw_test[raw_test['class'] == 1])],
+           "Class 1 %": [round(100*len(raw_data[raw_data['class'] == 1])/len(raw_data),2),round(100*len(raw_train[raw_train['class'] == 1])/len(raw_train),2), round(100*len(raw_val[raw_val['class'] == 1])/len(raw_val), 2), round(100*len(raw_test[raw_test['class'] == 1])/len(raw_test),2)]
            }
-   df_datasets = pd.DataFrame(datasets)
+   df_datasets = pd.DataFrame(datasets, index=["Raw Data", "Train Data", "Validation set", "Test Data"])
    st.write(df_datasets)
 
 

@@ -42,7 +42,7 @@ def detect_outliers(data):
             
             outliers = data[(data[column] > upper_bound) | (data[column] < lower_bound)][column]
             outlier_percentage = len(outliers) / len(data[column]) * 100
-            outlier_info[column] = {"Outlier_percentage": outlier_percentage, "Total_count_of_outliers": len(outliers)}
+            outlier_info[column] = {"Outlier_percentage": outlier_percentage, "Total_count": len(outliers)}
                          
             outlier_dataframe = pd.DataFrame(outlier_info).T
                                                 
@@ -250,7 +250,7 @@ with tab3:
         For resampling strategy we used RandomOverSampler and SMOTENC. Both are resampling strategies found in the imbalanced-learn library. Both of these strategies\
         use oversampling, a strategy where we generate datapoints which will represent the minority class.\n
         We can see the difference between the two strategies below:""")
-   st.image('images/ros_smotenc_zoomed.png')
+   st.image('images/ros_smotenc_more_zoomed.png')
    
    with st.expander("RandomOverSampler"):
        st.write("""
