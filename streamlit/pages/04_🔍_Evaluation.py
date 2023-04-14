@@ -156,6 +156,7 @@ with tab1:
         st.write("""
         At this stage we don't have any specific use for the validation dataset, so we decided to merge it with the training dataset. This way we have more data to \
             train the best model on, (hopefully) resulting in a model with better prediction capabilities.""")
+        st.write(f"""The size of the final training dataset is: {len(y_train_final)}""")
             
     with st.expander("Training an AdaBoostClassifier on the expanded training data"):
         st.write("""
@@ -176,7 +177,7 @@ with tab1:
         Based on this result we can assume that the model does not overfit our data and that the model can generalize well on unseen data.\n
         We can note that while this model missed 13 fraudulent transactions from the total 95, which is quite a low number compared to the previous results\
         In the meantime the model 'only' made 97 False Positive predictions, which is relatively low compared to the high recall score, and thus we will not\
-        flood the transaction controlling department with too many cases to look through.""")
+        flood the money laundering department with too many cases to look through.""")
 
 with tab2:
     with st.expander("Default decision threshold"):
@@ -221,7 +222,9 @@ Using this threshold, we could 'translate' the final models probability predicti
     with st.expander("Results for threshold tuning in our project"):
          
          st.markdown("""
- As a result of adjusting the decison threshold, we got a better recall score, but our False Positive rate also increased significantly.\n
+ In this case, adjusting the threshold did not had a big effect on the models performance. This could be because the adjusted threshold is already close to the \
+standard decision threshold of 0.5. \n
+Further exploration of the threshold tuning could be to try the threshold tuning BEFORE hyperparameter tuning, instead of how we did here.
 """)
  
          col1, col2 = st.columns(2)

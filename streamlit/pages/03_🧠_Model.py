@@ -111,8 +111,8 @@ with tab1:
 
     with st.expander("__Recall__"):
         st.write("""
-        We assume that the primary goal for the credit card company is to catch all the fraudulent transactions -high recall- , while minimising the number\
-                 of False Positive transactions as a secondary focus, so we don't overwhelm the controlling department with extra cases. Recall alone would not be a suitable metric\
+        We assume that the primary goal for the credit card company is to catch as many as possible of the fraudulent transactions -high recall- , while minimising the number\
+                 of False Positive transactions as a secondary focus, so we don't overwhelm the money laundering department with extra cases. Recall alone would not be a suitable metric\
                  as we can quite easily achieve a high recall, by classifying most of the transactions as fraudulent.\
                  We would need a metric which prioritizes recall, but takes precision into consideration as well. We would use this metric to compare the different models on.
     """)
@@ -161,7 +161,7 @@ with tab2:
         This is the most straightforward strategy: We simply tried the standard classification models models on the transformed dataset. This approach was our baseline.
     """)
     
-    with st.expander("Using the BalancerRandomForestClassifier model"):
+    with st.expander("Using the BalancedRandomForestClassifier model"):
         st.write("""
         A balanced random forest classifier. A balanced random forest randomly under-samples each boostrap sample to balance it. So every time the model takes\
         bootstrap samples (samples with replacement) from the dataset, it will reduce the number of samples from the majority class, to the same number as the\
@@ -231,7 +231,18 @@ with tab5:
 with tab6:
     st.markdown("""Based on the result of the models after the hyperparameter tuning, we decided to choose the model with the best Fbeta score:\n
 __AdaBoostClassifier on the dataset balanced with RandomOverSampler__""")
-    st.image('images/final_model.png')
+    st.image('images/best_model.png')
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("""When we will test the model on the test dataset, the raw test data will go through the following pipeline:\n
+- Custom Transformer: a custom written data transformer which takes in (raw) X_test and y_test, imputes any missing data, scales the Amount variable with RobustScaler\ 
+make a logarithmic transformation on the Amount, transforms the Time variable into hours and makes dummy encodes them.\n
+- RandomOverSampler: the dataset is then resampled with the RandomOverSampler
+- AdaBoostClassifier with DecisionTreeClassifier: fitting is made on the tuned AdaBoostClassifier using the tuned DecisionTreeClassifier""")
+        
+    with col2:
+        st.image('images/pipeline.png')
 
 # ###################################################################################
 # ---------------------------------------------------------------------------------
